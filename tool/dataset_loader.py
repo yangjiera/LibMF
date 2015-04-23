@@ -1,5 +1,6 @@
 import numpy as np
 import csv
+import sys
 
 def load_dataset(name, cv=False, iteration=0):
 	if not cv:
@@ -64,7 +65,25 @@ def read_UI_matrix(name, iteration=0):
 
 	return UI_matrix, u_mapper, i_mapper
 
+def read_side_info(name, mapper, object):
+	if object == 'u':
+		fname = "../dataset/"+name+'/u.user'
+	elif object == 'v':
+		fname = "../dataset/"+name+'/u.item'
+	else:
+		print 'Error: please select the right object for reading side information'
+		sys.exit(0)
+	info_dict = dict([])
+	with open(fname, 'r') as csvfile:
+		contentreader = csv.reader(csvfile, delimiter='|')
+		for info_list in contentreader:
+			oid = info_list[0]
+			if oid in mapper:
+				info_dict[mapper[oid]] = info_list[1:]
+	return info_dict
+
 if __name__ == '__main__':
 	for i in xrange(5):
 		UI_matrix_train, UI_test, u_mapper, i_mapper = load_dataset('FourCity', True, i+1)
-
+	u_info = read_side_info('FourCity', u_mapper, 'u')
+	print len(u_info), u_mapper['5976'], u_info[0]
