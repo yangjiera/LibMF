@@ -5,6 +5,7 @@ Test files for the modules MF&NMF
 
 import numpy as np
 import sys
+sys.path.append(sys.path[0][0:-5]+'/model/')
 from scipy.sparse import rand
 
 from mf import *
