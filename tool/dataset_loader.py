@@ -2,13 +2,13 @@ import numpy as np
 import csv
 import sys
 
-def load_dataset(name, cv=False, iteration=0):
+def load_dataset(name, cv=False, iteration=0, filter=""):
 	if not cv:
-		UI_matrix, u_mapper, i_mapper = read_UI_matrix(name)
+		UI_matrix, u_mapper, i_mapper = read_UI_matrix(name, 0, filter)
 		return UI_matrix, u_mapper, i_mapper
 
 	else:
-		UI_matrix_train, u_mapper, i_mapper = read_UI_matrix(name, iteration)
+		UI_matrix_train, u_mapper, i_mapper = read_UI_matrix(name, iteration, filter)
 		#print '#users in training set: ', len(u_mapper)
 		UI_test = dict([])
 		with open("../dataset/" + name + '/u' + str(iteration) + '.test', 'r') as csvfile:
@@ -31,7 +31,7 @@ def load_dataset(name, cv=False, iteration=0):
 		#print '#users in test set: ', len(UI_test)
 		return UI_matrix_train, UI_test, u_mapper, i_mapper
 
-def read_UI_matrix(name, iteration=0):
+def read_UI_matrix(name, iteration=0, filter=""):
 	u_mapper = dict([])
 	i_mapper = dict([])
 	u_index = 0
@@ -49,6 +49,10 @@ def read_UI_matrix(name, iteration=0):
 			uid = line[0]
 			iid = line[1]
 			rating = line[2]
+
+			if filter !="":
+				if line[4]!=filter:
+					continue
 
 			if uid not in u_mapper:
 				u_mapper[uid] = u_index
@@ -84,6 +88,6 @@ def read_side_info(name, mapper, object):
 
 if __name__ == '__main__':
 	for i in xrange(5):
-		UI_matrix_train, UI_test, u_mapper, i_mapper = load_dataset('FourCity', True, i+1)
+		UI_matrix_train, UI_test, u_mapper, i_mapper = load_dataset('FourCity', True, i+1, "")
 	u_info = read_side_info('FourCity', u_mapper, 'u')
 	print len(u_info), u_mapper['5976'], u_info[0]

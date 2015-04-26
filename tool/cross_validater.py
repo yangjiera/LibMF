@@ -11,13 +11,14 @@ def cross_validate(dataset, cv=True):
             '[warning]: users and items in test set much appear in training set, ' + \
             'otherwise the corresponding UI interaction records are removed.'
     for i in xrange(5):
+        #UI_matrix_train, UI_test, u_mapper, i_mapper = load_dataset(dataset, cv, i+1, "amsterdam")
         UI_matrix_train, UI_test, u_mapper, i_mapper = load_dataset(dataset, cv, i+1)
         O = get_mask_matrix(UI_matrix_train)
         
         alpha = 0.01 
         beta = 0.01
         lamb = 0.001
-        mf = Sparse_BasicMF(alpha, beta, lamb, 10, 2000, O)
+        mf = Sparse_BasicMF(alpha, beta, lamb, 10, 1000, O)
         
         print 'Decomposing...'
         U_dcp, V_dcp = mf.decomp(UI_matrix_train)
@@ -40,4 +41,4 @@ def get_mask_matrix(X):
     return O
 
 if __name__ == '__main__':
-    cross_validate('FourCity', True)
+    cross_validate('Movielens/ml-100k', True)
