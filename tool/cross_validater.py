@@ -42,4 +42,5 @@ def get_mask_matrix(X):
 
 if __name__ == '__main__':
     #cross_validate('Movielens/ml-100k', True)
-    cross_validate('FourCity', True, filter="amsterdam")
+    #cross_validate('FourCity10', True, filter="london")
+    cross_validate('FourCity10', True)
